@@ -1,0 +1,190 @@
+swagger: "2.0"
+info:
+  title: Partners API
+  description: API for working with partners
+  version: "1.0"
+host: localhost:8080
+basePath: /
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+
+  /partners:
+    get:
+      summary: Get all partners
+      description: Returns all partners list
+      tags: 
+      - partners
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Partners list
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Partner"
+        500:
+          description: Ошибка сервера
+    post:
+      summary: Create new partner
+      description: Added new partner
+      tags: 
+      - partners
+      parameters:
+        - in: body
+          name: partner
+          description: Partner's params
+          schema:
+            $ref: "#/definitions/PartnerInput"
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Партнер успешно добавлен
+          schema:
+            $ref: "#/definitions/Partner"
+        400:
+          description: Request Error
+        500:
+          description: Internal Server Error
+  /partners/{id}:
+    get:
+      summary: Get information about a partner by ID
+      description: Returns information about the partner by ID
+      tags: 
+      - partners
+      parameters:
+        - name: id
+          in: path
+          description: ID партнера
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Partner Information
+          schema:
+            $ref: "#/definitions/Partner"
+        404:
+          description: Partner not found
+        500:
+          description: Inernal Server Error
+  /partners/{id}/status:
+    put:
+      summary: Update partner status
+      description: Updates partner status
+      tags: 
+      - partners
+      parameters:
+        - name: id
+          in: path
+          description: partner ID
+          required: true
+          type: string
+        - in: body
+          name: partner
+          description: Change partners info and status
+          schema:
+            $ref: "#/definitions/PartnerStatusInput"
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Partner status has been successfully updated
+          schema:
+            $ref: "#/definitions/Partner"
+        400:
+          description: Request error
+        404:
+          description: Partner not found
+        500:
+          description: Internal Server Error
+
+  /purchases:
+    post:
+      summary: Submit purchase data
+      description: Submit purchase data for processing and forwarding to another endpoint
+      tags:
+        - purchases
+      parameters:
+        - name: purchase
+          in: body
+          description: Purchase data
+          required: true
+          schema:
+            $ref: "#/definitions/Purchase"
+      responses:
+        200:
+          description: Purchase data received and processed successfully
+          schema:
+            type: string
+        400:
+          description: Invalid request body
+          schema:
+            type: string
+        500:
+          description: Internal server error
+          schema:
+            type: string
+
+definitions:
+  Partner:
+    type: object
+    required:
+      - id
+      - name
+      - status
+      - created_at
+      - updated_at
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Unique partner number
+  
+  PartnerInput:
+    type: object
+    required:
+      - name
+      - expires_at
+    properties:
+      name:
+        type: string
+      expires_at:
+        type: string
+      status:
+        $ref: '#/definitions/PartnerStatusInput'
+  
+  PartnerStatusInput:
+    type: object
+    properties:
+      active:
+        type: boolean
+      expiry_date:
+        type: string
+        format: date-time
+
+
+  Purchase:
+    type: object
+    required:
+      - token_id
+      - contract_id
+      - partner_name
+      - purchase_cost
+    properties:
+      token_id:
+        type: string
+      contract_id:
+        type: string
+      partner_name:
+        type: string
+      purchase_cost:
+        type: number
