@@ -19,13 +19,14 @@ func main() {
 	startDB()
 
 	r := gin.Default()
+	h := handlers.PartnerHandler{}
 
-	handlers := handlers.PartnerHandler{}
+	r.POST("/partners", h.CreatePartnerHandler)
+	r.PUT("/partners/:id", h.SetPartnerStatusHandler)
+	r.GET("/partners/:id", h.GetPartnerByIDHandler)
+	r.GET("/partners", h.GetAllPartners)
 
-	r.POST("/partners", handlers.CreatePartnerHandler)
-	r.PUT("/partners/:id", handlers.SetPartnerStatusHandler)
-	r.GET("/partners/:id", handlers.GetPartnerByIDHandler)
-	r.GET("/partners", handlers.GetAllPartners)
+	r.POST("/purchase", handlers.GetPurchase)
 
 	server := &http.Server{
 		Addr:    ":8080",

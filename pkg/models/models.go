@@ -16,32 +16,12 @@ type Status struct {
 	ExpiryDate time.Time `json:"expiryDate"`
 }
 
-// swagger:parameters createPurchase
 type Purchase struct {
-	// Token ID for the purchase
-	//
-	// in: body
-	// required: true
-	TokenID string `json:"token_id"`
-
-	// Contract ID for the purchase
-	//
-	// in: body
-	// required: true
-	ContractID string `json:"contract_id"`
-
-	// Partner name for the purchase
-	//
-	// in: body
-	// required: true
-	PartnerID int `json:"partner_id"`
-
-	// Amount for the purchase
-	//
-	// in: body
-	// required: true
-	Amount    float64   `json:"amount"`
-	Timestamp time.Time `json:"timestamp"`
+	TokenID         int       `json:"token_id"`
+	ContractAddress string    `json:"contract_address"`
+	PartnerName     string    `json:"partner_name"`
+	PurchaseAmount  float64   `json:"purchase_amount"`
+	Timestamp       time.Time `json:"timestamp"`
 }
 
 // DB

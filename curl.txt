@@ -1,0 +1,1 @@
+curl -X POST -d '{"token_id": 0, "contract_address": "0x3957945F11fD887704b1070cBDbba269aed3E4f2", "partner_name": "Partner A", "purchase_value": 100.5}' http://localhost:8080/purchase
